@@ -1,0 +1,150 @@
+
+{% extends "base.html" %}
+
+{% block title %}Jobs - Job Tracker{% endblock %}
+
+{% block content %}
+
+<h1>Jobs</h1>
+<p class="subtitle">Manage job opportunities and their required skills.</p>
+
+<div class="card">
+    <h2>Add Job</h2>
+
+    <form action="{{ url_for('add_job') }}" method="POST">
+        <div class="form-grid">
+
+            <div>
+                <label for="company_id">Company</label>
+                <select id="company_id" name="company_id" required>
+                    <option value="">Select Company</option>
+                    {% for company in companies %}
+                    <option value="{{ company.company_id }}">
+                        {{ company.company_name }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div>
+                <label for="job_title">Job Title</label>
+                <input id="job_title" type="text"
+                       name="job_title" maxlength="100" required>
+            </div>
+
+            <div>
+                <label for="job_type">Job Type</label>
+                <select id="job_type" name="job_type">
+                    <option value="">Select Type</option>
+                    <option value="Full-time">Full-time</option>
+                    <option value="Part-time">Part-time</option>
+                    <option value="Contract">Contract</option>
+                    <option value="Internship">Internship</option>
+                </select>
+            </div>
+
+            <div>
+                <label for="salary_min">Minimum Salary ($)</label>
+                <input id="salary_min" type="number"
+                       name="salary_min" min="0" step="1">
+            </div>
+
+            <div>
+                <label for="salary_max">Maximum Salary ($)</label>
+                <input id="salary_max" type="number"
+                       name="salary_max" min="0" step="1">
+            </div>
+
+            <div>
+                <label for="job_url">Job Posting URL</label>
+                <input id="job_url" type="url"
+                       name="job_url" maxlength="300"
+                       placeholder="https://example.com/job">
+            </div>
+
+            <div>
+                <label for="date_posted">Date Posted</label>
+                <input id="date_posted" type="date"
+                       name="date_posted">
+            </div>
+
+            <div>
+                <label for="requirements">Required Skills</label>
+                <input id="requirements" type="text"
+                       name="requirements"
+                       placeholder="Python, SQL, Flask">
+            </div>
+
+        </div>
+
+        <button type="submit">Add Job</button>
+    </form>
+</div>
+
+<div class="card">
+    <h2>Job Listings</h2>
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Job Title</th>
+                    <th>Company</th>
+                    <th>Job Type</th>
+                    <th>Salary Range</th>
+                    <th>Required Skills</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for job in jobs %}
+                <tr>
+                    <td>{{ job.job_title }}</td>
+                    <td>{{ job.company_name }}</td>
+                    <td>{{ job.job_type or '—' }}</td>
+
+                    <td>
+                        {% if job.salary_min is not none
+                              or job.salary_max is not none %}
+                            {{ job.salary_min if job.salary_min is not none else '—' }}
+                            -
+                            {{ job.salary_max if job.salary_max is not none else '—' }}
+                        {% else %}
+                            —
+                        {% endif %}
+                    </td>
+
+                    <td>{{ job.requirements or '—' }}</td>
+
+                    <td>
+                        <a href="{{ url_for('edit_job',
+                                   job_id=job.job_id) }}">
+                            Edit
+                        </a>
+
+                        <form action="{{ url_for('delete_job',
+                                      job_id=job.job_id) }}"
+                              method="POST"
+                              onsubmit="return confirm('Delete this job?');">
+
+                            <button type="submit" class="btn-danger">
+                                Delete
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+
+                {% else %}
+                <tr>
+                    <td colspan="6">
+                        No jobs have been added yet.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

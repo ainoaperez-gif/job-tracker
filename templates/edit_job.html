@@ -1,0 +1,123 @@
+
+{% extends "base.html" %}
+
+{% block title %}Edit Job - Job Tracker{% endblock %}
+
+{% block content %}
+
+<h1>Edit Job</h1>
+<p class="subtitle">
+    Update the information for this job opportunity.
+</p>
+
+<div class="card">
+    <h2>{{ job.job_title }}</h2>
+
+    <form action="{{ url_for('update_job', job_id=job.job_id) }}"
+          method="POST">
+
+        <div class="form-grid">
+
+            <div>
+                <label for="company_id">Company</label>
+                <select id="company_id" name="company_id" required>
+                    {% for company in companies %}
+                    <option value="{{ company.company_id }}"
+                        {% if company.company_id == job.company_id %}
+                        selected
+                        {% endif %}>
+                        {{ company.company_name }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div>
+                <label for="job_title">Job Title</label>
+                <input id="job_title"
+                       type="text"
+                       name="job_title"
+                       value="{{ job.job_title }}"
+                       maxlength="100"
+                       required>
+            </div>
+
+            <div>
+                <label for="job_type">Job Type</label>
+                <select id="job_type" name="job_type">
+                    <option value="">Select Type</option>
+
+                    {% for type in [
+                        'Full-time',
+                        'Part-time',
+                        'Contract',
+                        'Internship'
+                    ] %}
+                    <option value="{{ type }}"
+                        {% if job.job_type == type %}
+                        selected
+                        {% endif %}>
+                        {{ type }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div>
+                <label for="salary_min">Minimum Salary ($)</label>
+                <input id="salary_min"
+                       type="number"
+                       name="salary_min"
+                       min="0"
+                       step="1"
+                       value="{{ job.salary_min if job.salary_min is not none else '' }}">
+            </div>
+
+            <div>
+                <label for="salary_max">Maximum Salary ($)</label>
+                <input id="salary_max"
+                       type="number"
+                       name="salary_max"
+                       min="0"
+                       step="1"
+                       value="{{ job.salary_max if job.salary_max is not none else '' }}">
+            </div>
+
+            <div>
+                <label for="job_url">Job Posting URL</label>
+                <input id="job_url"
+                       type="url"
+                       name="job_url"
+                       maxlength="300"
+                       value="{{ job.job_url or '' }}">
+            </div>
+
+            <div>
+                <label for="date_posted">Date Posted</label>
+                <input id="date_posted"
+                       type="date"
+                       name="date_posted"
+                       value="{{ job.date_posted or '' }}">
+            </div>
+
+            <div>
+                <label for="requirements">Required Skills</label>
+                <input id="requirements"
+                       type="text"
+                       name="requirements"
+                       value="{{ job.skills_text }}"
+                       placeholder="Python, SQL, Flask">
+            </div>
+
+        </div>
+
+        <button type="submit">Save Changes</button>
+
+        <a href="{{ url_for('jobs') }}" class="btn">
+            Cancel
+        </a>
+
+    </form>
+</div>
+
+{% endblock %}

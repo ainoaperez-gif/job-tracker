@@ -1,0 +1,114 @@
+
+{% extends "base.html" %}
+
+{% block title %}Edit Application - Job Tracker{% endblock %}
+
+{% block content %}
+
+
+<h1>Edit Application</h1>
+
+<p class="subtitle">
+    Update the status and details of this application.
+</p>
+
+<div class="card">
+
+    <h2>Application Details</h2>
+
+    <form action="{{ url_for('update_application', application_id=application.application_id) }}"
+          method="POST">
+
+        <div class="form-grid">
+
+            <div>
+                <label for="job_id">Job</label>
+
+                <select id="job_id" name="job_id" required>
+                    {% for job in jobs %}
+                    <option value="{{ job.job_id }}"
+                        {% if job.job_id == application.job_id %}
+                        selected
+                        {% endif %}>
+                        {{ job.job_title }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div>
+                <label for="application_date">Application Date</label>
+
+                <input type="date"
+                       id="application_date"
+                       name="application_date"
+                       value="{{ application.application_date or '' }}">
+            </div>
+
+            <div>
+                <label for="status">Status</label>
+
+                <select id="status" name="status">
+                    {% for status in [
+                        'Applied',
+                        'Screening',
+                        'Interview',
+                        'Offer',
+                        'Rejected',
+                        'Withdrawn'
+                    ] %}
+                    <option value="{{ status }}"
+                        {% if application.status == status %}
+                        selected
+                        {% endif %}>
+                        {{ status }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div>
+                <label for="resume_version">Resume Version</label>
+
+                <input type="text"
+                       id="resume_version"
+                       name="resume_version"
+                       value="{{ application.resume_version or '' }}">
+            </div>
+
+            <div>
+                <label for="cover_letter_sent">Cover Letter</label>
+
+                <label>
+                    <input type="checkbox"
+                           id="cover_letter_sent"
+                           name="cover_letter_sent"
+                           value="1"
+                           {% if application.cover_letter_sent %}
+                           checked
+                           {% endif %}>
+                    Cover letter sent
+                </label>
+            </div>
+
+            <div>
+                <label for="interview_notes">Interview Notes</label>
+
+                <textarea id="interview_notes"
+                          name="interview_notes"
+                          rows="4">{{ application.interview_notes or '' }}</textarea>
+            </div>
+
+        </div>
+
+        <button type="submit">Save Changes</button>
+
+        <a href="{{ url_for('applications') }}" class="btn">
+            Cancel
+        </a>
+
+    </form>
+
+</div>
+
+{% endblock %}

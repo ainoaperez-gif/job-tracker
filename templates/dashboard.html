@@ -1,0 +1,61 @@
+
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Job Tracker{% endblock %}
+
+{% block content %}
+
+<h1>Dashboard</h1>
+<p class="subtitle">
+    Overview of your job applications and opportunities.
+</p>
+
+<div class="stats-grid">
+
+    <div class="stat-card">
+        <h3>Companies</h3>
+        <div class="stat-number">{{ companies }}</div>
+        <a href="{{ url_for('companies') }}">
+            View Companies
+        </a>
+    </div>
+
+    <div class="stat-card">
+        <h3>Jobs</h3>
+        <div class="stat-number">{{ jobs }}</div>
+        <a href="{{ url_for('jobs') }}">
+            View Jobs
+        </a>
+    </div>
+
+    <div class="stat-card">
+        <h3>Applications</h3>
+        <div class="stat-number">{{ applications }}</div>
+        <a href="{{ url_for('applications') }}">
+            View Applications
+        </a>
+    </div>
+
+    <div class="stat-card">
+        <h3>Contacts</h3>
+        <div class="stat-number">{{ contacts }}</div>
+        <a href="{{ url_for('contacts') }}">
+            View Contacts
+        </a>
+    </div>
+
+</div>
+
+<div class="card">
+    <h2>Job Match</h2>
+    <p>
+        Compare your skills against job requirements and
+        discover which opportunities are the best match.
+    </p>
+
+    <a class="btn" href="{{ url_for('job_match') }}">
+        Find Matching Jobs
+    </a>
+</div>
+
+{% endblock %}

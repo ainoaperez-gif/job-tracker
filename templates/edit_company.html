@@ -1,0 +1,91 @@
+
+{% extends "base.html" %}
+
+{% block title %}Edit Company - Job Tracker{% endblock %}
+
+{% block content %}
+
+<h1>Edit Company</h1>
+
+<p class="subtitle">
+    Update the information for this company.
+</p>
+
+<div class="card">
+
+    <h2>{{ company.company_name }}</h2>
+
+    <form action="{{ url_for('update_company', company_id=company.company_id) }}"
+          method="POST">
+
+        <div class="form-grid">
+
+            <div>
+                <label for="company_name">Company Name</label>
+                <input
+                    type="text"
+                    id="company_name"
+                    name="company_name"
+                    value="{{ company.company_name }}"
+                    maxlength="100"
+                    required
+                >
+            </div>
+
+            <div>
+                <label for="industry">Industry</label>
+                <input
+                    type="text"
+                    id="industry"
+                    name="industry"
+                    value="{{ company.industry or '' }}"
+                    maxlength="50"
+                >
+            </div>
+
+            <div>
+                <label for="website">Website</label>
+                <input
+                    type="text"
+                    id="website"
+                    name="website"
+                    value="{{ company.website or '' }}"
+                    maxlength="200"
+                >
+            </div>
+
+            <div>
+                <label for="city">City</label>
+                <input
+                    type="text"
+                    id="city"
+                    name="city"
+                    value="{{ company.city or '' }}"
+                    maxlength="50"
+                >
+            </div>
+
+            <div>
+                <label for="state">State</label>
+                <input
+                    type="text"
+                    id="state"
+                    name="state"
+                    value="{{ company.state or '' }}"
+                    maxlength="50"
+                >
+            </div>
+
+        </div>
+
+        <button type="submit">Save Changes</button>
+
+        <a href="{{ url_for('companies') }}" class="btn">
+            Cancel
+        </a>
+
+    </form>
+
+</div>
+
+{% endblock %}

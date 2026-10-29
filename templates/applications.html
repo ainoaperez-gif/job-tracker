@@ -1,0 +1,156 @@
+
+{% extends "base.html" %}
+
+{% block title %}Applications - Job Tracker{% endblock %}
+
+{% block content %}
+
+<h1>Applications</h1>
+<p class="subtitle">
+    Track your job applications and their progress.
+</p>
+
+<div class="card">
+    <h2>Add Application</h2>
+
+    <form action="{{ url_for('add_application') }}" method="POST">
+        <div class="form-grid">
+
+            <div>
+                <label for="job_id">Job</label>
+                <select id="job_id" name="job_id" required>
+                    <option value="">Select a Job</option>
+                    {% for job in jobs %}
+                    <option value="{{ job.job_id }}">
+                        {{ job.job_title }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div>
+                <label for="application_date">
+                    Application Date
+                </label>
+                <input type="date"
+                       id="application_date"
+                       name="application_date">
+            </div>
+
+            <div>
+                <label for="status">Status</label>
+                <select id="status" name="status">
+                    <option value="Applied">Applied</option>
+                    <option value="Screening">Screening</option>
+                    <option value="Interview">Interview</option>
+                    <option value="Offer">Offer</option>
+                    <option value="Rejected">Rejected</option>
+                    <option value="Withdrawn">Withdrawn</option>
+                </select>
+            </div>
+
+            <div>
+                <label for="resume_version">
+                    Resume Version
+                </label>
+                <input type="text"
+                       id="resume_version"
+                       name="resume_version"
+                       placeholder="Resume v1">
+            </div>
+
+            <div>
+                <label for="cover_letter_sent">
+                    Cover Letter
+                </label>
+                <label>
+                    <input type="checkbox"
+                           id="cover_letter_sent"
+                           name="cover_letter_sent"
+                           value="1">
+                    Cover letter sent
+                </label>
+            </div>
+
+            <div>
+                <label for="interview_notes">
+                    Interview Notes
+                </label>
+                <textarea id="interview_notes"
+                          name="interview_notes"
+                          rows="3"
+                          placeholder="Add interview notes"></textarea>
+            </div>
+
+        </div>
+
+        <button type="submit">Add Application</button>
+    </form>
+</div>
+
+<div class="card">
+    <h2>Application List</h2>
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Company</th>
+                    <th>Job Title</th>
+                    <th>Date Applied</th>
+                    <th>Status</th>
+                    <th>Resume</th>
+                    <th>Cover Letter</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for application in applications %}
+                <tr>
+                    <td>{{ application.company_name }}</td>
+                    <td>{{ application.job_title }}</td>
+                    <td>
+                        {{ application.application_date or '—' }}
+                    </td>
+                    <td>{{ application.status }}</td>
+                    <td>
+                        {{ application.resume_version or '—' }}
+                    </td>
+                    <td>
+                        {% if application.cover_letter_sent %}
+                            Yes
+                        {% else %}
+                            No
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{{ url_for('edit_application',
+                            application_id=application.application_id) }}">
+                            Edit
+                        </a>
+
+                        <form action="{{ url_for('delete_application',
+                            application_id=application.application_id) }}"
+                              method="POST"
+                              onsubmit="return confirm('Delete this application?');">
+                            <button type="submit"
+                                    class="btn-danger">
+                                Delete
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="7">
+                        No applications have been added yet.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

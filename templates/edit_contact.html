@@ -1,0 +1,102 @@
+
+{% extends "base.html" %}
+
+{% block title %}Edit Contact - Job Tracker{% endblock %}
+
+{% block content %}
+
+<h1>Edit Contact</h1>
+<p class="subtitle">
+    Update this professional contact's information.
+</p>
+
+<div class="card">
+    <h2>{{ contact.contact_name }}</h2>
+
+    <form action="{{ url_for('update_contact', contact_id=contact.contact_id) }}"
+          method="POST">
+
+        <div class="form-grid">
+
+            <div>
+                <label for="company_id">Company</label>
+
+                <select id="company_id" name="company_id" required>
+                    {% for company in companies %}
+                    <option value="{{ company.company_id }}"
+                        {% if company.company_id == contact.company_id %}
+                        selected
+                        {% endif %}>
+                        {{ company.company_name }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div>
+                <label for="contact_name">Contact Name</label>
+
+                <input type="text"
+                       id="contact_name"
+                       name="contact_name"
+                       value="{{ contact.contact_name }}"
+                       maxlength="100"
+                       required>
+            </div>
+
+            <div>
+                <label for="title">Job Title</label>
+
+                <input type="text"
+                       id="title"
+                       name="title"
+                       value="{{ contact.title or '' }}">
+            </div>
+
+            <div>
+                <label for="email">Email</label>
+
+                <input type="email"
+                       id="email"
+                       name="email"
+                       value="{{ contact.email or '' }}">
+            </div>
+
+            <div>
+                <label for="phone">Phone</label>
+
+                <input type="text"
+                       id="phone"
+                       name="phone"
+                       value="{{ contact.phone or '' }}">
+            </div>
+
+            <div>
+                <label for="linkedin_url">LinkedIn URL</label>
+
+                <input type="url"
+                       id="linkedin_url"
+                       name="linkedin_url"
+                       value="{{ contact.linkedin_url or '' }}">
+            </div>
+
+            <div>
+                <label for="notes">Notes</label>
+
+                <textarea id="notes"
+                          name="notes"
+                          rows="4">{{ contact.notes or '' }}</textarea>
+            </div>
+
+        </div>
+
+        <button type="submit">Save Changes</button>
+
+        <a href="{{ url_for('contacts') }}" class="btn">
+            Cancel
+        </a>
+
+    </form>
+</div>
+
+{% endblock %}

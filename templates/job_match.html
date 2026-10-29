@@ -1,0 +1,134 @@
+
+{% extends "base.html" %}
+
+{% block title %}Job Match - Job Tracker{% endblock %}
+
+{% block content %}
+
+<h1>Job Match</h1>
+
+<p class="subtitle">
+    Find job opportunities that match your skills.
+</p>
+
+<div class="card">
+    <h2>Enter Your Skills</h2>
+
+    <p>
+        Enter your skills separated by commas to compare them
+        with the requirements of jobs in your database.
+    </p>
+
+    <form action="{{ url_for('job_match') }}" method="POST">
+
+        <label for="skills">Your Skills</label>
+
+        <input
+            type="text"
+            id="skills"
+            name="skills"
+            placeholder="Python, SQL, Flask, HTML, CSS"
+            value="{{ skills_input or '' }}"
+            required
+        >
+
+        <button type="submit">
+            Find Matching Jobs
+        </button>
+
+    </form>
+</div>
+
+{% if results is defined and results %}
+
+<div class="card">
+
+    <h2>Matching Job Results</h2>
+
+    <p>
+        Jobs are ranked from highest to lowest matching percentage.
+    </p>
+
+    <div class="table-container">
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>Job Title</th>
+                    <th>Company</th>
+                    <th>Match</th>
+                    <th>Matching Skills</th>
+                    <th>Missing Skills</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                {% for result in results %}
+
+                <tr>
+
+                    <td>
+                        <strong>{{ result.job_title }}</strong>
+                    </td>
+
+                    <td>
+                        {{ result.company_name }}
+                    </td>
+
+                    <td>
+                        <strong>
+                            {{ result.percentage }}%
+                        </strong>
+
+                        <p>
+                            {{ result.matched_count }}
+                            of
+                            {{ result.total_count }}
+                            skills
+                        </p>
+                    </td>
+
+                    <td>
+                        {% if result.matching %}
+                            {{ result.matching | join(', ') }}
+                        {% else %}
+                            None
+                        {% endif %}
+                    </td>
+
+                    <td>
+                        {% if result.missing %}
+                            {{ result.missing | join(', ') }}
+                        {% else %}
+                            None
+                        {% endif %}
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+{% elif request.method == 'POST' %}
+
+<div class="card">
+    <h2>No Matches Found</h2>
+
+    <p>
+        No job listings are available to compare.
+        Add jobs and their required skills first.
+    </p>
+</div>
+
+{% endif %}
+
+{% endblock %}
