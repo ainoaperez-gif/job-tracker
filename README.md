@@ -112,7 +112,7 @@ The `schema.sql` file contains the database structure.
 Clone the GitHub repository:
 
 ```bash
-git clone https://github.com/ainoaperez-git/job-tracker.git
+git clone https://github.com/ainoaperez-gif/job-tracker.git
 cd job-tracker
 ```
 
@@ -130,11 +130,18 @@ python -m pip install -r requirements.txt
 
 ### Step 3: Set Up the MySQL Database
 
-Open MySQL Workbench and connect to a local MySQL server.
+Open MySQL Workbench and connect to your local MySQL server.
 
-Open the included `schema.sql` file and execute it to create the database tables.
+Run the following SQL to create and select the database:
 
-If the exported SQL script does not automatically create the `job_tracker` database, create that database before executing the script.
+```sql
+CREATE DATABASE IF NOT EXISTS job_tracker;
+USE job_tracker;
+```
+
+Open the included `schema.sql` file in MySQL Workbench. Make sure `job_tracker` is selected as the active database for that SQL editor tab, then execute the script to create the four tables.
+
+**Important:** Run `schema.sql` only on a new or empty database. The exported script contains `DROP TABLE IF EXISTS` statements, which can remove existing tables and their data.
 
 ### Step 4: Configure Environment Variables
 
